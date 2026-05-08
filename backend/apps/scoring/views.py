@@ -3,34 +3,66 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from apps.users.permissions import IsAdminOrOfficial, IsResident
-from apps.cycles.models import ProgramCycle
-from .engine import compute_rankings
+from apps.cycles.models import ProgramCycle, CycleApplication
+from apps.audit.models import AuditLog
+from .engine import run_ranking, compute_rankings
 
 
 class RankingView(APIView):
     """
     POST /api/scoring/rank/
-    Body: { "cycle_id": int, "applicant_ids": [int, ...] }
-    Returns the ranked list for the given cycle and applicants.
+    Body: { "cycle_id": int }
+
+    Reads all APPLIED CycleApplications for the cycle, runs the full ranking
+    algorithm (household rule, scoring, selection), writes SELECTED/DEFERRED
+    status back, and returns the ranked list.
     """
     permission_classes = [IsAuthenticated, IsAdminOrOfficial]
 
     def post(self, request):
         cycle_id = request.data.get('cycle_id')
-        applicant_ids = request.data.get('applicant_ids', [])
-
-        if not cycle_id or not applicant_ids:
-            return Response({'detail': 'cycle_id and applicant_ids are required.'}, status=400)
+        if not cycle_id:
+            return Response({'detail': 'cycle_id is required.'}, status=400)
 
         cycle = get_object_or_404(ProgramCycle, pk=cycle_id)
-        results = compute_rankings(cycle, applicant_ids)
-        return Response({'cycle': cycle.cycle_name, 'rankings': results})
+        results = run_ranking(cycle)
+
+        # Enrich with beneficiary names for the frontend
+        if results:
+            from apps.cycles.models import CycleApplication
+            from apps.beneficiaries.models import Beneficiary
+            names = dict(
+                Beneficiary.objects.filter(
+                    id__in=[r['beneficiary_id'] for r in results]
+                ).values_list('id', 'full_name')
+            )
+            for r in results:
+                r['beneficiary_name'] = names.get(r['beneficiary_id'], '')
+
+        AuditLog.objects.create(
+            user=request.user,
+            action='generate_ranking',
+            target_table='cycle_applications',
+            target_id=str(cycle.id),
+            details={
+                'cycle_name': cycle.cycle_name,
+                'cycle_id': str(cycle.id),
+                'applicants_ranked': len(results),
+                'slots': cycle.slots,
+            },
+        )
+
+        return Response({'cycle': cycle.cycle_name, 'slots': cycle.slots, 'rankings': results})
 
 
 class ResidentScoreView(APIView):
     """
     GET /api/scoring/my-score/?cycle_id=<id>
-    Returns ranking position and score breakdown for the authenticated resident.
+
+    Returns the authenticated resident's ranking position, score, and
+    criteria breakdown for the given cycle. The score and rank are read from
+    the stored CycleApplication; the breakdown is computed dynamically from
+    BeneficiaryIndicator so it always reflects the current indicator values.
     """
     permission_classes = [IsAuthenticated, IsResident]
 
@@ -45,17 +77,20 @@ class ResidentScoreView(APIView):
 
         cycle = get_object_or_404(ProgramCycle, pk=cycle_id)
 
-        # Score only within the context of all applicants for that cycle
-        from apps.cycles.models import ParticipationRecord
-        applicant_ids = list(
-            ParticipationRecord.objects.filter(cycle=cycle)
-            .values_list('beneficiary_id', flat=True)
-            .distinct()
-        ) or [beneficiary.id]
+        try:
+            application = CycleApplication.objects.get(beneficiary=beneficiary, cycle=cycle)
+        except CycleApplication.DoesNotExist:
+            return Response({'detail': 'You have not applied for this cycle.'}, status=400)
 
-        if beneficiary.id not in applicant_ids:
-            applicant_ids.append(beneficiary.id)
+        # Compute breakdown dynamically from BeneficiaryIndicator
+        entries = compute_rankings(cycle, [beneficiary.id])
+        breakdown = entries[0]['breakdown'] if entries else []
+        has_participated = entries[0]['has_participated'] if entries else False
 
-        rankings = compute_rankings(cycle, applicant_ids)
-        my_entry = next((r for r in rankings if r['beneficiary_id'] == beneficiary.id), None)
-        return Response(my_entry or {'detail': 'Not ranked in this cycle.'})
+        return Response({
+            'status': application.status,
+            'rank': application.rank_position,
+            'total_score': application.computed_score,
+            'has_participated': has_participated,
+            'breakdown': breakdown,
+        })

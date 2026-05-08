@@ -2,12 +2,26 @@ from rest_framework import serializers
 from .models import Criterion
 
 
+FIELD_KEY_CHOICES = {
+    '',
+    'monthly_income',
+    'employment_status',
+    'household_size',
+    'num_dependents',
+    'housing_condition',
+    'is_pwd',
+    'is_senior',
+    'is_solo_parent',
+    'is_4ps',
+}
+
+
 class CriterionSerializer(serializers.ModelSerializer):
     updated_by_name = serializers.CharField(source='updated_by.full_name', read_only=True)
 
     class Meta:
         model = Criterion
-        fields = ['id', 'name', 'weight', 'type', 'is_active', 'updated_by', 'updated_by_name', 'created_at', 'updated_at']
+        fields = ['id', 'name', 'weight', 'type', 'field_key', 'is_active', 'updated_by', 'updated_by_name', 'created_at', 'updated_at']
         read_only_fields = ['id', 'updated_by', 'created_at', 'updated_at']
 
     def validate(self, data):
@@ -15,6 +29,12 @@ class CriterionSerializer(serializers.ModelSerializer):
         instance = self.instance
         is_active = data.get('is_active', getattr(instance, 'is_active', True))
         weight = data.get('weight', getattr(instance, 'weight', 0))
+        field_key = data.get('field_key', getattr(instance, 'field_key', ''))
+
+        if field_key not in FIELD_KEY_CHOICES:
+            raise serializers.ValidationError({
+                'field_key': 'Invalid linked profile field.'
+            })
 
         active_qs = Criterion.objects.filter(is_active=True)
         if instance:

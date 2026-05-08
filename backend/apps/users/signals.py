@@ -9,5 +9,5 @@ def log_user_login(sender, request, user, **kwargs):
         user=user,
         action='login',
         target_table='users',
-        target_id=user.id,
+        target_id=str(user.id),
     )

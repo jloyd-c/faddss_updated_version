@@ -5,7 +5,19 @@ from decouple import config
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-change-this-in-production')
-DEBUG = config('DEBUG', default=True, cast=bool)
+def bool_config(name, default=True):
+    value = config(name, default=default)
+    if isinstance(value, bool):
+        return value
+    normalized = str(value).strip().lower()
+    if normalized in {'1', 'true', 'yes', 'on', 'debug'}:
+        return True
+    if normalized in {'0', 'false', 'no', 'off', 'release', 'production', 'prod'}:
+        return False
+    return bool(value)
+
+
+DEBUG = bool_config('DEBUG', default=True)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
 
 INSTALLED_APPS = [
@@ -96,7 +108,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_PAGINATION_CLASS': 'faddss.pagination.StandardResultsSetPagination',
     'PAGE_SIZE': 20,
 }
 

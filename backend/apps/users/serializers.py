@@ -6,7 +6,10 @@ from .models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'full_name', 'role', 'is_active', 'beneficiary', 'created_at']
+        fields = [
+            'id', 'username', 'first_name', 'middle_name', 'last_name',
+            'full_name', 'role', 'is_active', 'beneficiary', 'created_at',
+        ]
         read_only_fields = ['id', 'created_at']
 
 
@@ -15,7 +18,10 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'password', 'full_name', 'role', 'beneficiary']
+        fields = [
+            'username', 'password', 'first_name', 'middle_name', 'last_name',
+            'full_name', 'role', 'beneficiary',
+        ]
 
     def create(self, validated_data):
         password = validated_data.pop('password')
@@ -28,4 +34,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['full_name', 'role', 'is_active', 'beneficiary']
+        fields = [
+            'first_name', 'middle_name', 'last_name',
+            'full_name', 'role', 'is_active', 'beneficiary',
+        ]

@@ -1,3 +1,172 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    @apply bg-ink-50 text-ink-900 antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  ::selection {
+    @apply bg-primary-100 text-primary-900;
+  }
+
+  h1, h2, h3 {
+    @apply tracking-tight;
+  }
+
+  table {
+    @apply border-separate border-spacing-0;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    @apply border-primary-600 ring-2 ring-primary-600/20;
+  }
+}
+
+@layer components {
+  .skeleton {
+    background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s ease infinite;
+    border-radius: 0.5rem;
+  }
+
+  .card {
+    @apply overflow-hidden rounded-xl border border-slate-200 bg-white shadow-card;
+  }
+
+  .page-section-label {
+    @apply text-[11px] font-semibold uppercase tracking-widest text-primary-700;
+  }
+
+  .table-header th {
+    @apply border-b border-slate-200 bg-slate-50 px-4 py-3.5 text-[11px] font-semibold uppercase tracking-wider text-ink-400;
+  }
+
+  .table-row {
+    @apply transition-colors hover:bg-slate-50/70;
+  }
+
+  .table-row td {
+    @apply border-b border-slate-100 px-4 py-3 text-sm;
+  }
+
+  .table-row:last-child td {
+    @apply border-b-0;
+  }
+
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold leading-4;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center gap-2 rounded-lg bg-primary-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:bg-primary-800 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-ink-700 transition-all hover:border-primary-200 hover:bg-primary-50 active:scale-[0.98];
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-semibold text-ink-600 transition-all hover:bg-slate-100 active:scale-[0.98];
+  }
+
+  .form-input {
+    @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-ink-900 shadow-sm placeholder:text-ink-400 transition focus:border-primary-600 focus:ring-2 focus:ring-primary-600/20 focus:outline-none;
+  }
+
+  .form-input-error {
+    @apply border-red-400 bg-red-50/40 focus:border-red-400 focus:ring-red-400/20;
+  }
+
+  .alert-error {
+    @apply flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700;
+  }
+
+  .alert-info {
+    @apply flex items-start gap-3 rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-700;
+  }
+
+  .alert-warning {
+    @apply flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700;
+  }
+
+  .alert-success {
+    @apply flex items-start gap-3 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700;
+  }
+
+  .gov-shell {
+    background:
+      linear-gradient(180deg, rgba(30, 58, 138, 0.03), rgba(248, 250, 252, 0)),
+      #f8fafc;
+  }
+
+  .shadow-panel {
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 8px 20px rgba(16, 24, 40, 0.05);
+  }
+
+  /* Hero card: entrance slide-up then continuous float */
+  .hero-card-enter {
+    animation: slide-up 0.5s ease-out 0.24s both, float 5s ease-in-out 0.74s infinite;
+  }
+
+  /* Landing page */
+  .landing-dot-grid {
+    background-image: radial-gradient(circle, #cbd5e1 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+
+  .reveal-section {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.55s ease-out, transform 0.55s ease-out;
+  }
+
+  .reveal-section.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Panel step stagger — runs immediately on page load (hero is above the fold) */
+  .panel-step {
+    animation: slide-right 0.4s ease-out both;
+  }
+  .panel-step:nth-child(1) { animation-delay: 0.40s; }
+  .panel-step:nth-child(2) { animation-delay: 0.48s; }
+  .panel-step:nth-child(3) { animation-delay: 0.56s; }
+  .panel-step:nth-child(4) { animation-delay: 0.64s; }
+  .panel-step:nth-child(5) { animation-delay: 0.72s; }
+  .panel-step:nth-child(6) { animation-delay: 0.80s; }
+
+  /* Per-card scroll stagger — triggered by .is-staggered on the grid parent */
+  .stagger-container .stagger-child {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.45s ease-out, transform 0.45s ease-out;
+  }
+  .stagger-container.is-staggered .stagger-child:nth-child(1) { opacity: 1; transform: none; transition-delay: 0ms; }
+  .stagger-container.is-staggered .stagger-child:nth-child(2) { opacity: 1; transform: none; transition-delay: 70ms; }
+  .stagger-container.is-staggered .stagger-child:nth-child(3) { opacity: 1; transform: none; transition-delay: 140ms; }
+  .stagger-container.is-staggered .stagger-child:nth-child(4) { opacity: 1; transform: none; transition-delay: 210ms; }
+  .stagger-container.is-staggered .stagger-child:nth-child(5) { opacity: 1; transform: none; transition-delay: 280ms; }
+  .stagger-container.is-staggered .stagger-child:nth-child(6) { opacity: 1; transform: none; transition-delay: 350ms; }
+
+  /* Feature card top-border accent on hover */
+  .feature-card-accent {
+    border-top: 2px solid transparent;
+    transition: border-top-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .feature-card-accent:hover {
+    border-top-color: #1e3a8a;
+  }
+}

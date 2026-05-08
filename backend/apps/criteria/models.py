@@ -1,7 +1,10 @@
 from django.db import models
+import uuid
 
 
 class Criterion(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
     TYPE_BENEFIT = 'benefit'
     TYPE_COST = 'cost'
     TYPE_CHOICES = [
@@ -13,6 +16,7 @@ class Criterion(models.Model):
     weight = models.DecimalField(max_digits=5, decimal_places=4)
     type = models.CharField(max_length=10, choices=TYPE_CHOICES)
     is_active = models.BooleanField(default=True)
+    field_key = models.CharField(max_length=50, blank=True, default='')
     updated_by = models.ForeignKey(
         'users.User',
         on_delete=models.PROTECT,

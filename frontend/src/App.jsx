@@ -5,6 +5,7 @@ import Layout from './components/common/Layout'
 
 // Auth
 import Login from './pages/auth/Login'
+import Landing from './pages/public/Landing'
 
 // Admin pages
 import AdminDashboard from './pages/admin/Dashboard'
@@ -14,9 +15,12 @@ import CriteriaManagement from './pages/admin/CriteriaManagement'
 // Official pages
 import OfficialDashboard from './pages/official/Dashboard'
 import BeneficiaryList from './pages/official/BeneficiaryList'
+import BeneficiaryDetail from './pages/official/BeneficiaryDetail'
 import BeneficiaryForm from './pages/official/BeneficiaryForm'
 import CycleList from './pages/official/CycleList'
 import CycleDetail from './pages/official/CycleDetail'
+import MarkApplicants from './pages/official/MarkApplicants'
+import HouseholdManagement from './pages/official/HouseholdManagement'
 import ScoringRanking from './pages/official/ScoringRanking'
 import ParticipationRecord from './pages/official/ParticipationRecord'
 import AuditTrail from './pages/official/AuditTrail'
@@ -47,11 +51,14 @@ function OfficialRoutes() {
       <Layout>
         <Routes>
           <Route path="dashboard" element={<OfficialDashboard />} />
+          <Route path="households" element={<HouseholdManagement />} />
           <Route path="beneficiaries" element={<BeneficiaryList />} />
           <Route path="beneficiaries/new" element={<BeneficiaryForm />} />
+          <Route path="beneficiaries/:id" element={<BeneficiaryDetail />} />
           <Route path="beneficiaries/:id/edit" element={<BeneficiaryForm />} />
           <Route path="cycles" element={<CycleList />} />
           <Route path="cycles/:id" element={<CycleDetail />} />
+          <Route path="cycles/:id/mark-applicants" element={<MarkApplicants />} />
           <Route path="scoring" element={<ScoringRanking />} />
           <Route path="participation" element={<ParticipationRecord />} />
           <Route path="audit" element={<AuditTrail />} />
@@ -87,7 +94,7 @@ export default function App() {
           <Route path="/official/*" element={<OfficialRoutes />} />
           <Route path="/resident/*" element={<ResidentRoutes />} />
           <Route path="/unauthorized" element={<div className="p-8 text-red-600">Access denied.</div>} />
-          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/" element={<Landing />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

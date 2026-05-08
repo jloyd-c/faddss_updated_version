@@ -8,5 +8,5 @@ class UserAdmin(BaseUserAdmin):
     list_display = ['username', 'full_name', 'role', 'is_active', 'created_at']
     list_filter = ['role', 'is_active']
     fieldsets = BaseUserAdmin.fieldsets + (
-        ('FADDSS', {'fields': ('full_name', 'role', 'beneficiary')}),
+        ('FADDSS', {'fields': ('middle_name', 'full_name', 'role', 'beneficiary')}),
     )
