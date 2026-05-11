@@ -228,7 +228,7 @@ function ProfileChangeLogTab() {
                       <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" /><rect x="9" y="3" width="6" height="4" rx="2" />
                     </svg>
                     <p className="text-sm font-semibold text-ink-600">No profile change logs</p>
-                    <p className="text-xs text-ink-400">Changes to beneficiary profiles will appear here.</p>
+                    <p className="text-xs text-ink-400">Changes to resident profiles will appear here.</p>
                   </div>
                 </td>
               </tr>
@@ -333,3 +333,4 @@ export default function AuditTrail() {
     </div>
   )
 }
+

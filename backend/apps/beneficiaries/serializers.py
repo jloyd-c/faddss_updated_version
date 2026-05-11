@@ -128,7 +128,7 @@ class BeneficiarySerializer(serializers.ModelSerializer):
 
         errors = {}
         if family is None:
-            errors['family'] = 'Beneficiary must belong to a Family.'
+            errors['family'] = 'Resident profile must belong to a Family.'
         if not role:
             errors['role'] = 'Role is required.'
         if not birthdate:
@@ -153,7 +153,7 @@ class BeneficiarySerializer(serializers.ModelSerializer):
             if instance:
                 household_head_qs = household_head_qs.exclude(pk=instance.pk)
             if household_head_qs.exists():
-                errors['is_household_head'] = 'Only one beneficiary per Household can be marked as household head.'
+                errors['is_household_head'] = 'Only one resident profile per Household can be marked as household head.'
 
         if errors:
             raise serializers.ValidationError(errors)
@@ -193,7 +193,7 @@ class BeneficiaryIndicatorWriteSerializer(serializers.ModelSerializer):
         beneficiary = self.context['beneficiary']
         if not beneficiary.is_tupad_eligible:
             raise serializers.ValidationError(
-                'Indicators can only be encoded for TUPAD-eligible adult beneficiaries.'
+                'Indicators can only be encoded for TUPAD-eligible adult resident profiles.'
             )
         before = None
         try:

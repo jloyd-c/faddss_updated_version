@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
+import faddssLogo from '../../assets/faddss-logo.svg'
+import faddssLogoLight from '../../assets/faddss-logo-light.svg'
 
 const FEATURES = [
   {
     title: 'Household-first profiling',
-    text: 'Encode households, families, and beneficiary members in the proper structure.',
+    text: 'Encode households, families, and resident profile members in the proper structure.',
     icon: <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-8h6v8" />,
   },
   {
@@ -54,9 +56,8 @@ export default function Login() {
       <div className="flex min-h-screen">
         <div className="relative hidden flex-col justify-between overflow-hidden bg-primary-900 p-12 text-white lg:flex lg:w-1/2 xl:w-[55%]">
           <div>
-            <Link to="/" className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary-100 hover:bg-white/15">
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/15 text-[10px]">BB</span>
-              Barangay Batobalani - Paracale
+            <Link to="/">
+              <img src={faddssLogoLight} alt="FADDSS" className="h-10 w-auto" />
             </Link>
           </div>
 
@@ -94,19 +95,15 @@ export default function Login() {
 
         <div className="flex flex-1 items-center justify-center px-6 py-12">
           <div className="w-full max-w-[410px]">
-            <div className="mb-8 flex flex-col items-center gap-3 lg:hidden">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-900 text-white shadow-lift">BB</div>
-              <div className="text-center">
-                <p className="text-lg font-bold text-ink-900">FADDSS</p>
-                <p className="text-xs text-ink-500">Barangay Batobalani TUPAD DSS</p>
-              </div>
+            <div className="mb-8 flex justify-center lg:hidden">
+              <img src={faddssLogo} alt="FADDSS" className="h-14 w-auto" />
             </div>
 
             <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-lift">
               <div className="mb-7">
-                <div className="mb-5 hidden h-11 w-11 items-center justify-center rounded-xl bg-primary-900 text-white shadow-sm lg:flex">BB</div>
-                <h2 className="text-2xl font-bold text-ink-900">Portal Sign In</h2>
-                <p className="mt-1 text-sm text-ink-500">Access your FADDSS account.</p>
+                <p className="page-section-label">Secure Access</p>
+                <h2 className="mt-1 text-2xl font-bold text-ink-900">Sign in to your account</h2>
+                <p className="mt-1 text-sm text-ink-500">Use your barangay-issued username and password.</p>
               </div>
 
               {error && (
@@ -177,3 +174,4 @@ export default function Login() {
     </div>
   )
 }
+

@@ -1,5 +1,6 @@
 import { useAuth } from '../../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
+import faddssLogoLight from '../../assets/faddss-logo-light.svg'
 
 const ROLE_LABELS = {
   admin: 'Administrator',
@@ -39,18 +40,7 @@ export default function Navbar({ onMenu }) {
           </svg>
         </button>
 
-        <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/15 bg-white/10 text-primary-100">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-              <polyline points="9 22 9 12 15 12 15 22" />
-            </svg>
-          </div>
-          <div>
-            <span className="block text-[13px] font-bold leading-tight tracking-wide">FADDSS</span>
-            <span className="block text-[10px] leading-tight text-primary-200/70">Brgy. Batobalani - TUPAD DSS</span>
-          </div>
-        </div>
+        <img src={faddssLogoLight} alt="FADDSS" className="h-9 w-auto" />
       </div>
 
       <div className="flex items-center gap-3">

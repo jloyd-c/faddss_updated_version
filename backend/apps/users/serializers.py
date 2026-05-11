@@ -38,3 +38,13 @@ class UserUpdateSerializer(serializers.ModelSerializer):
             'first_name', 'middle_name', 'last_name',
             'full_name', 'role', 'is_active', 'beneficiary',
         ]
+
+
+class UserPasswordResetSerializer(serializers.Serializer):
+    password = serializers.CharField(write_only=True, validators=[validate_password])
+
+    def save(self, **kwargs):
+        user = self.context['user']
+        user.set_password(self.validated_data['password'])
+        user.save(update_fields=['password'])
+        return user

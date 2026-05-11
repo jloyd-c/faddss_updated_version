@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { cyclesApi } from '../../api/cycles'
-import { beneficiariesApi } from '../../api/beneficiaries'
+import { residentProfilesApi } from '../../api/beneficiaries'
 import Pagination from '../../components/common/Pagination'
 
 export default function MarkApplicants() {
@@ -9,7 +9,7 @@ export default function MarkApplicants() {
   const navigate = useNavigate()
 
   const [cycle, setCycle] = useState(null)
-  const [beneficiaries, setBeneficiaries] = useState([])
+  const [residentProfiles, setResidentProfiles] = useState([])
   const [ineligibleMatches, setIneligibleMatches] = useState([])
   const [applications, setApplications] = useState([])
   const [search, setSearch] = useState('')
@@ -29,13 +29,13 @@ export default function MarkApplicants() {
       }
       const [cycleData, benData, appData, allMatchData] = await Promise.all([
         cyclesApi.get(id),
-        beneficiariesApi.list(beneficiaryParams),
+        residentProfilesApi.list(beneficiaryParams),
         cyclesApi.listApplications(id),
-        searchQuery ? beneficiariesApi.list({ search: searchQuery, page_size: 20 }) : Promise.resolve({ results: [] }),
+        searchQuery ? residentProfilesApi.list({ search: searchQuery, page_size: 20 }) : Promise.resolve({ results: [] }),
       ])
       const allMatches = allMatchData.results ?? allMatchData
       setCycle(cycleData)
-      setBeneficiaries(benData.results ?? benData)
+      setResidentProfiles(benData.results ?? benData)
       setIneligibleMatches(searchQuery ? allMatches.filter((b) => !b.is_tupad_eligible) : [])
       setMeta(benData.results ? benData : null)
       setPage(nextPage)
@@ -56,7 +56,7 @@ export default function MarkApplicants() {
   const markedIds = new Set(applications.map((a) => a.beneficiary))
   const isRanked = applications.some((a) => a.status === 'selected' || a.status === 'deferred')
 
-  const filtered = beneficiaries
+  const filtered = residentProfiles
 
   const handleMark = async (beneficiaryId) => {
     if (markedIds.has(beneficiaryId) || isRanked) return   // already marked or locked
@@ -72,7 +72,7 @@ export default function MarkApplicants() {
       if (detail?.detail) {
         setError(detail.detail)
       } else if (detail?.non_field_errors) {
-        setError(`${detail.non_field_errors[0]} This beneficiary is already marked for this cycle.`)
+        setError(`${detail.non_field_errors[0]} This resident profile is already marked for this cycle.`)
       } else {
         setError('Failed to mark applicant. They may already be marked for this cycle.')
       }
@@ -132,12 +132,12 @@ export default function MarkApplicants() {
           {filtered.length === 0 ? (
             <div className="px-4 py-6 text-center">
               <p className="text-sm text-gray-400">
-                No eligible beneficiaries found. Check if the beneficiary is 18+ and not marked as child.
+                No eligible resident profiles found. Check if the resident profile is 18 years old or above.
               </p>
               {ineligibleMatches.length > 0 && (
                 <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 text-left">
                   <p className="border-b border-amber-200 px-3 py-2 text-xs font-semibold text-amber-800">
-                    Found in beneficiary records, but not eligible for TUPAD application:
+                    Found in resident profile records, but not eligible for TUPAD application:
                   </p>
                   {ineligibleMatches.map((b) => (
                     <div key={b.id} className="flex items-center justify-between gap-3 px-3 py-2">
@@ -193,3 +193,5 @@ export default function MarkApplicants() {
     </div>
   )
 }
+
+

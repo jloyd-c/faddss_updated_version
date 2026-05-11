@@ -55,7 +55,7 @@ export default function ParticipationHistory() {
       <div className="card overflow-hidden">
         <div className="border-b border-slate-100 px-5 py-4">
           <h2 className="text-sm font-bold text-ink-900">Recorded Participation</h2>
-          <p className="mt-0.5 text-xs text-ink-400">Official work records connected to your beneficiary profile.</p>
+          <p className="mt-0.5 text-xs text-ink-400">Official work records connected to your resident profile.</p>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[720px] text-sm">
@@ -128,3 +128,4 @@ function MetricCard({ label, value, tone, compact }) {
     </div>
   )
 }
+

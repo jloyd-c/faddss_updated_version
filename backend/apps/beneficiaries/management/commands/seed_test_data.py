@@ -379,6 +379,10 @@ class Command(BaseCommand):
         for index, application in enumerate(selected, start=1):
             beneficiary = application.beneficiary
             user, was_created = User.objects.get_or_create(username=f'resident{index}')
+            existing_link = User.objects.filter(beneficiary=beneficiary).exclude(pk=user.pk).first()
+            if existing_link:
+                user = existing_link
+                was_created = False
             user.first_name = beneficiary.first_name
             user.middle_name = beneficiary.middle_name
             user.last_name = beneficiary.last_name

@@ -145,7 +145,7 @@ export default function ParticipationRecord() {
           <p className="page-section-label">Barangay Operations</p>
           <h1 className="mt-1 text-2xl font-bold text-ink-900">Record Participation</h1>
           <p className="mt-1 max-w-2xl text-sm text-ink-500">
-            Log completed TUPAD participation for beneficiaries selected in a program cycle.
+            Log completed TUPAD participation for Resident Profiles selected in a program cycle.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -156,7 +156,7 @@ export default function ParticipationRecord() {
             {selectedApplicants.length} selected applicant{selectedApplicants.length === 1 ? '' : 's'}
           </span>
           <span className={`badge ${readyToRecord ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-ink-500'}`}>
-            {readyToRecord ? 'Ready to record' : 'Awaiting beneficiary'}
+            {readyToRecord ? 'Ready to record' : 'Awaiting resident profile'}
           </span>
         </div>
       </div>
@@ -211,7 +211,7 @@ export default function ParticipationRecord() {
             </section>
 
             <section className="space-y-3">
-              <SectionTitle number="2" title="Select Beneficiary" />
+              <SectionTitle number="2" title="Select Resident Profile" />
               <Field label="Selected Applicant" error={errors.beneficiary}>
                 <div className="relative">
                   <svg className="pointer-events-none absolute left-3 top-3 text-ink-400" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -359,7 +359,7 @@ export default function ParticipationRecord() {
             <h2 className="text-base font-bold text-ink-900">Current Selection</h2>
             <div className="mt-4 space-y-3">
               <SummaryRow label="Cycle" value={selectedCycle?.cycle_name || 'No cycle selected'} active={Boolean(selectedCycle)} />
-              <SummaryRow label="Beneficiary" value={selectedBeneficiary?.beneficiary_name || 'No beneficiary selected'} active={Boolean(selectedBeneficiary)} />
+              <SummaryRow label="Resident Profile" value={selectedBeneficiary?.beneficiary_name || 'No resident profile selected'} active={Boolean(selectedBeneficiary)} />
               <SummaryRow label="Selected pool" value={`${selectedApplicants.length} accepted applicant${selectedApplicants.length === 1 ? '' : 's'}`} active={selectedApplicants.length > 0} />
             </div>
           </div>
@@ -420,3 +420,4 @@ function Field({ label, error, children }) {
 function inp(error) {
   return `form-input ${error ? 'form-input-error' : ''}`
 }
+

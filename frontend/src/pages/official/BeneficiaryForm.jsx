@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { beneficiariesApi, householdsApi, familiesApi } from '../../api/beneficiaries'
+import { residentProfilesApi, householdsApi, familiesApi } from '../../api/beneficiaries'
 import { SkeletonForm } from '../../components/common/Skeleton'
 
 const EMPTY_FORM = {
@@ -62,29 +62,28 @@ function computeAgeFromBirthdate(birthdate) {
   return age
 }
 
-function computeEligible(birthdate, role) {
+function computeEligible(birthdate) {
   const age = computeAgeFromBirthdate(birthdate)
-  return age !== null && age >= 18 && role !== 'child'
+  return age !== null && age >= 18
 }
 
-function eligibilityMessage(birthdate, role) {
+function eligibilityMessage(birthdate) {
   const age = computeAgeFromBirthdate(birthdate)
-  if (age === null || !role) return 'Complete birthdate and role to check TUPAD eligibility.'
-  if (age < 18) return 'Not eligible for TUPAD application because the beneficiary is below 18 years old.'
-  if (role === 'child') return 'Not eligible for TUPAD application because role is marked as child.'
+  if (age === null) return 'Complete birthdate to check TUPAD eligibility.'
+  if (age < 18) return 'Not eligible for TUPAD application because the resident profile is below 18 years old.'
   return 'Eligible for TUPAD application. Socio-economic indicators are required for scoring.'
 }
 
 function validate(form) {
   const errors = {}
-  if (!form.family) errors.family = 'Select the family this beneficiary belongs to.'
+  if (!form.family) errors.family = 'Select the family this resident profile belongs to.'
   if (!form.role) errors.role = 'Select role.'
   if (!form.first_name.trim()) errors.first_name = 'First name is required.'
   if (!form.last_name.trim()) errors.last_name = 'Last name is required.'
   if (!form.birthdate) errors.birthdate = 'Birthdate is required.'
   if (!form.gender) errors.gender = 'Select gender.'
   if (!form.civil_status) errors.civil_status = 'Select civil status.'
-  if (computeEligible(form.birthdate, form.role)) {
+  if (computeEligible(form.birthdate)) {
     if (!form.employment_status) errors.employment_status = 'Select employment status.'
     if (form.monthly_income === '' || isNaN(form.monthly_income) || Number(form.monthly_income) < 0)
       errors.monthly_income = 'Enter a valid monthly income.'
@@ -137,7 +136,7 @@ export default function BeneficiaryForm() {
 
   useEffect(() => {
     if (!isEdit) return
-    beneficiariesApi.get(id)
+    residentProfilesApi.get(id)
       .then((data) => {
         if (data.family_detail?.household) setSelectedHousehold(String(data.family_detail.household))
         const { first_name, middle_name, last_name } = splitFullName(data.full_name)
@@ -153,7 +152,7 @@ export default function BeneficiaryForm() {
           num_dependents: String(data.num_dependents ?? '0'), housing_condition: data.housing_condition ?? '',
         })
       })
-      .catch(() => setServerError('Failed to load beneficiary data.'))
+      .catch(() => setServerError('Failed to load resident profile data.'))
       .finally(() => setFetching(false))
   }, [id, isEdit])
 
@@ -176,7 +175,7 @@ export default function BeneficiaryForm() {
     if (Object.keys(validationErrors).length > 0) { setErrors(validationErrors); return }
     setLoading(true)
     setServerError('')
-    const eligible = computeEligible(form.birthdate, form.role)
+    const eligible = computeEligible(form.birthdate)
     const payload = {
       ...form,
       full_name: buildFullName(form.first_name, form.middle_name, form.last_name),
@@ -188,9 +187,9 @@ export default function BeneficiaryForm() {
       housing_condition: eligible ? form.housing_condition : 'makeshift',
     }
     try {
-      if (isEdit) await beneficiariesApi.update(id, payload)
-      else await beneficiariesApi.create(payload)
-      navigate('/official/beneficiaries')
+      if (isEdit) await residentProfilesApi.update(id, payload)
+      else await residentProfilesApi.create(payload)
+      navigate('/official/resident-profiles')
     } catch (err) {
       const detail = err.response?.data
       if (typeof detail === 'object') {
@@ -206,8 +205,8 @@ export default function BeneficiaryForm() {
   }
 
   const computedAge = computeAgeFromBirthdate(form.birthdate)
-  const isEligible = computeEligible(form.birthdate, form.role)
-  const eligibleMessage = eligibilityMessage(form.birthdate, form.role)
+  const isEligible = computeEligible(form.birthdate)
+  const eligibleMessage = eligibilityMessage(form.birthdate)
 
   if (fetching) return (
     <div className="max-w-2xl space-y-5">
@@ -220,7 +219,7 @@ export default function BeneficiaryForm() {
     <div className="max-w-5xl space-y-5">
       {/* Header */}
       <div>
-        <button onClick={() => navigate('/official/beneficiaries')} className="btn-ghost mb-3 -ml-2">
+        <button onClick={() => navigate('/official/resident-profiles')} className="btn-ghost mb-3 -ml-2">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M19 12H5" /><path d="M12 19l-7-7 7-7" />
           </svg>
@@ -228,7 +227,7 @@ export default function BeneficiaryForm() {
         </button>
         <div>
           <p className="page-section-label">Barangay Operations</p>
-          <h1 className="text-2xl font-bold text-ink-900">{isEdit ? 'Edit Beneficiary' : 'Add Beneficiary'}</h1>
+          <h1 className="text-2xl font-bold text-ink-900">{isEdit ? 'Edit Resident Profile' : 'Add Resident Profile'}</h1>
           <p className="mt-1 max-w-2xl text-sm text-ink-500">
             Encode the resident profile, household assignment, sector membership, and scoring indicators used by TUPAD selection.
           </p>
@@ -442,9 +441,9 @@ export default function BeneficiaryForm() {
                 </svg>
                 Saving...
               </>
-            ) : isEdit ? 'Save Changes' : 'Add Beneficiary'}
+            ) : isEdit ? 'Save Changes' : 'Add Resident Profile'}
           </button>
-          <button type="button" onClick={() => navigate('/official/beneficiaries')} className="btn-secondary">Cancel</button>
+          <button type="button" onClick={() => navigate('/official/resident-profiles')} className="btn-secondary">Cancel</button>
         </div>
       </form>
     </div>
@@ -482,3 +481,5 @@ function Field({ label, error, hint, children }) {
 function inp(error) {
   return `form-input ${error ? 'form-input-error' : ''}`
 }
+
+

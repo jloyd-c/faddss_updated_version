@@ -132,7 +132,7 @@ export default function CycleDetail() {
               />
               <ActionButton
                 title="Record Participation"
-                text="Log work records for selected beneficiaries only."
+                text="Log work records for selected Resident Profiles only."
                 onClick={() => navigate(`/official/participation?cycle=${id}`)}
                 variant="outline"
               />
@@ -145,7 +145,7 @@ export default function CycleDetail() {
             <h2 className="text-base font-bold text-ink-900">Cycle Flow</h2>
             <div className="mt-4 space-y-3">
               <FlowStep number="1" title="Applicants" text="Mark eligible residents as applied." active={hasApplicants} />
-              <FlowStep number="2" title="Scoring" text="Run ranking to choose beneficiaries." active={hasResults} />
+              <FlowStep number="2" title="Scoring" text="Run ranking to choose Resident Profiles." active={hasResults} />
               <FlowStep number="3" title="Participation" text="Record actual TUPAD work completion." active={hasParticipation} />
             </div>
           </div>
@@ -165,7 +165,7 @@ export default function CycleDetail() {
         title="Applications"
         count={applications.length}
         emptyText='No applicants marked yet. Use "Mark Applicants" to add residents.'
-        columns={['Beneficiary', 'Status', 'Rank', 'Score', 'Applied By', 'Date']}
+        columns={['Resident Profile', 'Status', 'Rank', 'Score', 'Applied By', 'Date']}
       >
         {applications.map((a) => (
           <tr key={a.id} className="transition-colors hover:bg-slate-50/70">
@@ -187,7 +187,7 @@ export default function CycleDetail() {
         title="Participation Records"
         count={participation.length}
         emptyText="No participation records yet for this cycle."
-        columns={['Beneficiary', 'Project', 'Days', 'Period', 'Recorded By']}
+        columns={['Resident Profile', 'Project', 'Days', 'Period', 'Recorded By']}
       >
         {participation.map((r) => (
           <tr key={r.id} className="transition-colors hover:bg-slate-50/70">
@@ -294,3 +294,4 @@ function DataTable({ title, count, emptyText, columns, children }) {
     </section>
   )
 }
+

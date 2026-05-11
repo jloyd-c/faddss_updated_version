@@ -5,7 +5,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 from .models import User
-from .serializers import UserSerializer, UserCreateSerializer, UserUpdateSerializer
+from .serializers import UserSerializer, UserCreateSerializer, UserUpdateSerializer, UserPasswordResetSerializer
 from .permissions import IsAdmin
 
 
@@ -69,3 +69,14 @@ class UserDetailView(generics.RetrieveUpdateAPIView):
         if self.request.method in ('PUT', 'PATCH'):
             return UserUpdateSerializer
         return UserSerializer
+
+
+class UserPasswordResetView(APIView):
+    permission_classes = [IsAuthenticated, IsAdmin]
+
+    def patch(self, request, pk):
+        user = generics.get_object_or_404(User, pk=pk)
+        serializer = UserPasswordResetSerializer(data=request.data, context={'user': user})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({'detail': 'Password updated successfully.'})

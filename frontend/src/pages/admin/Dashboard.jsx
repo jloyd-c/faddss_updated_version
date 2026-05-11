@@ -9,7 +9,7 @@ const CONTROLS = [
       </svg>
     ),
     title: 'User Management',
-    description: 'Create official accounts, link resident accounts to beneficiary profiles, and deactivate access as needed.',
+    description: 'Create official accounts, link resident accounts to resident profiles, and deactivate access as needed.',
     href: '/admin/users',
     cta: 'Manage users',
     badge: 'Role-based',
@@ -109,7 +109,7 @@ export default function AdminDashboard() {
         <p className="text-xs font-semibold uppercase tracking-widest text-ink-400 mb-4">System Architecture</p>
         <div className="grid gap-4 sm:grid-cols-3">
           {[
-            { label: 'Database tables', value: '7', note: 'Users, Beneficiaries, Criteria, Indicators, Cycles, Applications, Audit' },
+            { label: 'Database tables', value: '7', note: 'Users, Resident Profiles, Criteria, Indicators, Cycles, Applications, Audit' },
             { label: 'Scoring method', value: 'WSM', note: 'Weighted Sum Model with COST/BENEFIT normalization' },
             { label: 'Data protection', value: 'Insert-only', note: 'Participation records and audit logs are append-only' },
           ].map((item) => (
@@ -124,3 +124,4 @@ export default function AdminDashboard() {
     </div>
   )
 }
+

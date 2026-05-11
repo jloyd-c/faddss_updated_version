@@ -23,7 +23,7 @@ export default function ResidentProfile() {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    api.get('/beneficiaries/me/')
+    api.get('/resident-profiles/me/')
       .then((r) => setProfile(r.data))
       .catch(() => setError('Failed to load your profile. Please try again later.'))
       .finally(() => setLoading(false))
@@ -67,7 +67,7 @@ export default function ResidentProfile() {
                 <p className="text-[10px] font-semibold uppercase tracking-widest text-primary-300">Resident Portal</p>
                 <h1 className="mt-0.5 text-2xl font-bold">{profile.full_name}</h1>
                 <p className="mt-1 text-sm text-primary-100/75">
-                  {profile.household_code ? `Household ${profile.household_code}` : 'Beneficiary profile'}
+                  {profile.household_code ? `Household ${profile.household_code}` : 'Resident profile'}
                 </p>
               </div>
             </div>
@@ -129,7 +129,7 @@ export default function ResidentProfile() {
               {profile.is_tupad_eligible ? 'Eligible for TUPAD application' : 'Not currently eligible for TUPAD application'}
             </p>
             <p className={`mt-1 text-xs leading-5 ${profile.is_tupad_eligible ? 'text-emerald-700' : 'text-ink-500'}`}>
-              Eligibility is based on the barangay record: age must be 18 or above and role must not be child.
+              Eligibility is based on age: the resident must be 18 years old or above.
             </p>
           </div>
 
@@ -174,3 +174,4 @@ function HouseIcon() {
 function ScoreIcon() {
   return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10" /><line x1="12" y1="20" x2="12" y2="4" /><line x1="6" y1="20" x2="6" y2="14" /></svg>
 }
+

@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { beneficiariesApi, householdsApi } from '../../api/beneficiaries'
+import { residentProfilesApi, householdsApi } from '../../api/beneficiaries'
 import { cyclesApi } from '../../api/cycles'
 import { criteriaApi } from '../../api/criteria'
 import { auditApi } from '../../api/audit'
 import { Skeleton, SkeletonCards } from '../../components/common/Skeleton'
 
 const QUICK_LINKS = [
-  { label: 'New Beneficiary', href: '/official/beneficiaries/new' },
+  { label: 'New Resident Profile', href: '/official/resident-profiles/new' },
   { label: 'Households', href: '/official/households' },
   { label: 'Program Cycles', href: '/official/cycles' },
   { label: 'Scoring', href: '/official/scoring' },
@@ -18,7 +18,7 @@ const QUICK_LINKS = [
 const FLOW_STEPS = [
   { label: 'Create Household', href: '/official/households' },
   { label: 'Add Families', href: '/official/households' },
-  { label: 'Encode Beneficiaries', href: '/official/beneficiaries/new' },
+  { label: 'Encode Resident Profiles', href: '/official/resident-profiles/new' },
   { label: 'Create Cycle', href: '/official/cycles' },
   { label: 'Mark Applicants', href: '/official/cycles' },
   { label: 'Run Scoring', href: '/official/scoring' },
@@ -44,7 +44,7 @@ export default function OfficialDashboard() {
   const [error, setError] = useState('')
   const [summary, setSummary] = useState({
     households: 0,
-    beneficiaries: 0,
+    residentProfiles: 0,
     eligible: 0,
     cycles: 0,
     participation: 0,
@@ -69,8 +69,8 @@ export default function OfficialDashboard() {
           auditData,
         ] = await Promise.all([
           householdsApi.list({ page_size: 1 }),
-          beneficiariesApi.list({ page_size: 1 }),
-          beneficiariesApi.list({ page_size: 1, eligible: 'true' }),
+          residentProfilesApi.list({ page_size: 1 }),
+          residentProfilesApi.list({ page_size: 1, eligible: 'true' }),
           cyclesApi.list({ page_size: 5 }),
           cyclesApi.listParticipation({ page_size: 1 }),
           criteriaApi.list({ page_size: 100 }),
@@ -81,7 +81,7 @@ export default function OfficialDashboard() {
         setRecentCycles(cycles)
         setSummary({
           households: countFrom(householdData),
-          beneficiaries: countFrom(beneficiaryData),
+          residentProfiles: countFrom(beneficiaryData),
           eligible: countFrom(eligibleData),
           cycles: countFrom(cycleData),
           participation: countFrom(participationData),
@@ -118,7 +118,7 @@ export default function OfficialDashboard() {
   const completion = useMemo(() => {
     const checks = [
       summary.households > 0,
-      summary.beneficiaries > 0,
+      summary.residentProfiles > 0,
       summary.eligible > 0,
       summary.cycles > 0,
       Boolean(cycleStats && (cycleStats.applied + cycleStats.selected + cycleStats.deferred) > 0),
@@ -163,7 +163,7 @@ export default function OfficialDashboard() {
       ) : (
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <MetricCard label="Households" value={summary.households} note="encoded dwellings" color="primary" />
-          <MetricCard label="Beneficiaries" value={summary.beneficiaries} note={`${summary.eligible} TUPAD eligible`} color="blue" />
+          <MetricCard label="Resident Profiles" value={summary.residentProfiles} note={`${summary.eligible} TUPAD eligible`} color="blue" />
           <MetricCard label="Program Cycles" value={summary.cycles} note="selection windows" color="emerald" />
           <MetricCard label="Participation" value={summary.participation} note="insert-only records" color="amber" />
         </div>
@@ -266,7 +266,7 @@ export default function OfficialDashboard() {
             <div className="mt-4 space-y-3">
               <HealthRow label="Active Criteria" value={summary.criteria} />
               <HealthRow label="Audit Logs" value={summary.audits} />
-              <HealthRow label="Eligible Beneficiaries" value={summary.eligible} />
+              <HealthRow label="Eligible Resident Profiles" value={summary.eligible} />
             </div>
           </div>
         </aside>
@@ -324,3 +324,6 @@ function EmptyPanel({ title, text, action }) {
     </div>
   )
 }
+
+
+

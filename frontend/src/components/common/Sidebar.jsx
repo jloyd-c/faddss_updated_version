@@ -28,7 +28,7 @@ const ICONS = {
 const OFFICIAL_LINKS = [
   { to: '/official/dashboard', label: 'Dashboard', icon: ICONS.dashboard },
   { to: '/official/households', label: 'Households', icon: ICONS.household },
-  { to: '/official/beneficiaries', label: 'Beneficiaries', icon: ICONS.beneficiary },
+  { to: '/official/resident-profiles', label: 'Resident Profiles', icon: ICONS.beneficiary },
   { to: '/official/cycles', label: 'Program Cycles', icon: ICONS.cycles },
   { to: '/official/scoring', label: 'Scoring & Ranking', icon: ICONS.scoring },
   { to: '/official/participation', label: 'Participation', icon: ICONS.participation },

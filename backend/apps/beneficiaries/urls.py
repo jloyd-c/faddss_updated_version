@@ -16,7 +16,14 @@ urlpatterns = [
     path('families/', FamilyListCreateView.as_view(), name='family-list'),
     path('families/<uuid:pk>/', FamilyDetailView.as_view(), name='family-detail'),
 
-    # Beneficiaries
+    # Resident profiles (preferred public API wording)
+    path('resident-profiles/', BeneficiaryListCreateView.as_view(), name='resident-profile-list'),
+    path('resident-profiles/me/', ResidentProfileView.as_view(), name='resident-profile-me'),
+    path('resident-profiles/<uuid:pk>/', BeneficiaryDetailView.as_view(), name='resident-profile-detail'),
+    path('resident-profiles/<uuid:pk>/indicators/', BeneficiaryIndicatorView.as_view(), name='resident-profile-indicators'),
+    path('resident-profiles/<uuid:pk>/soft-delete/', BeneficiarySoftDeleteView.as_view(), name='resident-profile-soft-delete'),
+
+    # Beneficiaries (legacy API aliases kept for compatibility)
     path('beneficiaries/', BeneficiaryListCreateView.as_view(), name='beneficiary-list'),
     path('beneficiaries/me/', ResidentProfileView.as_view(), name='beneficiary-me'),
     path('beneficiaries/<uuid:pk>/', BeneficiaryDetailView.as_view(), name='beneficiary-detail'),

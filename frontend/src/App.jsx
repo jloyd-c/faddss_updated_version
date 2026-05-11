@@ -52,8 +52,12 @@ function OfficialRoutes() {
         <Routes>
           <Route path="dashboard" element={<OfficialDashboard />} />
           <Route path="households" element={<HouseholdManagement />} />
-          <Route path="beneficiaries" element={<BeneficiaryList />} />
-          <Route path="beneficiaries/new" element={<BeneficiaryForm />} />
+          <Route path="resident-profiles" element={<BeneficiaryList />} />
+          <Route path="resident-profiles/new" element={<BeneficiaryForm />} />
+          <Route path="resident-profiles/:id" element={<BeneficiaryDetail />} />
+          <Route path="resident-profiles/:id/edit" element={<BeneficiaryForm />} />
+          <Route path="beneficiaries" element={<Navigate to="../resident-profiles" replace />} />
+          <Route path="beneficiaries/new" element={<Navigate to="../resident-profiles/new" replace />} />
           <Route path="beneficiaries/:id" element={<BeneficiaryDetail />} />
           <Route path="beneficiaries/:id/edit" element={<BeneficiaryForm />} />
           <Route path="cycles" element={<CycleList />} />
@@ -100,3 +104,5 @@ export default function App() {
     </AuthProvider>
   )
 }
+
+

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { beneficiariesApi } from '../../api/beneficiaries'
+import { residentProfilesApi } from '../../api/beneficiaries'
 import { SkeletonForm } from '../../components/common/Skeleton'
 
 const EMPLOYMENT_LABELS = {
@@ -71,9 +71,9 @@ export default function BeneficiaryDetail() {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    beneficiariesApi.get(id)
+    residentProfilesApi.get(id)
       .then(setData)
-      .catch(() => setError('Failed to load beneficiary profile.'))
+      .catch(() => setError('Failed to load resident profile.'))
   }, [id])
 
   if (error) return (
@@ -95,11 +95,11 @@ export default function BeneficiaryDetail() {
     <div className="max-w-3xl space-y-5">
       {/* Header */}
       <div>
-        <button onClick={() => navigate('/official/beneficiaries')} className="btn-ghost mb-3 -ml-2">
+        <button onClick={() => navigate('/official/resident-profiles')} className="btn-ghost mb-3 -ml-2">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M19 12H5" /><path d="M12 19l-7-7 7-7" />
           </svg>
-          Back to Beneficiaries
+          Back to Resident Profiles
         </button>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
@@ -121,7 +121,7 @@ export default function BeneficiaryDetail() {
               <span className="badge bg-slate-100 text-ink-500">Not Eligible</span>
             )}
             <button
-              onClick={() => navigate(`/official/beneficiaries/${id}/edit`)}
+              onClick={() => navigate(`/official/resident-profiles/${id}/edit`)}
               className="btn-primary"
             >
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -186,3 +186,5 @@ export default function BeneficiaryDetail() {
     </div>
   )
 }
+
+

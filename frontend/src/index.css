@@ -169,4 +169,218 @@
   .feature-card-accent:hover {
     border-top-color: #1e3a8a;
   }
+
+  .landing-sample-hero {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-start;
+    min-height: calc(100svh - 73px);
+    padding-top: 1.75rem;
+    padding-bottom: 2.5rem;
+    background: linear-gradient(135deg, #fefefe 0%, #f0f4ff 100%);
+  }
+
+  @media (min-width: 1024px) {
+    .landing-sample-hero {
+      height: calc(100svh - 73px);
+      min-height: 620px;
+      align-items: center;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+  }
+
+  .landing-sample-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(30, 58, 138, 0.07) 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+    animation: landing-bg-fade 1.2s ease both;
+  }
+
+  .landing-fade-up {
+    opacity: 0;
+    animation: landing-fade-up 0.6s ease forwards;
+  }
+
+  .landing-delay-1 { animation-delay: 0.3s; }
+  .landing-delay-2 { animation-delay: 0.45s; }
+  .landing-delay-3 { animation-delay: 0.6s; }
+  .landing-delay-4 { animation-delay: 0.75s; }
+  .landing-delay-5 { animation-delay: 0.9s; }
+
+  .landing-fade-left {
+    opacity: 0;
+    animation: landing-fade-left 0.7s ease 0.5s forwards;
+  }
+
+  .landing-float {
+    animation: landing-float-y 5s ease-in-out 1.2s infinite;
+  }
+
+  .process-flow-grid.is-staggered .process-flow-card {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  .process-flow-card {
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+    transition:
+      opacity 0.5s ease,
+      transform 0.5s ease,
+      border-color 0.22s ease,
+      box-shadow 0.22s ease,
+      background-color 0.22s ease;
+  }
+
+  .process-flow-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(115deg, transparent 0%, rgba(37, 99, 235, 0.08) 42%, rgba(245, 158, 11, 0.12) 50%, rgba(37, 99, 235, 0.08) 58%, transparent 100%);
+    opacity: 0;
+    transform: translateX(-70%);
+    transition: opacity 0.25s ease, transform 0.75s ease;
+    pointer-events: none;
+  }
+
+  .process-flow-grid.is-staggered .process-flow-card:nth-child(1) { transition-delay: 0ms; }
+  .process-flow-grid.is-staggered .process-flow-card:nth-child(2) { transition-delay: 90ms; }
+  .process-flow-grid.is-staggered .process-flow-card:nth-child(3) { transition-delay: 180ms; }
+  .process-flow-grid.is-staggered .process-flow-card:nth-child(4) { transition-delay: 270ms; }
+  .process-flow-grid.is-staggered .process-flow-card:nth-child(5) { transition-delay: 360ms; }
+  .process-flow-grid.is-staggered .process-flow-card:nth-child(6) { transition-delay: 450ms; }
+
+  .process-flow-card:hover {
+    transform: translateY(-8px) scale(1.018);
+    box-shadow: 0 16px 38px rgba(30, 58, 138, 0.16), 0 2px 6px rgba(16, 24, 40, 0.06);
+  }
+
+  .process-flow-card:hover::before {
+    opacity: 1;
+    transform: translateX(70%);
+  }
+
+  .process-flow-badge {
+    position: relative;
+    isolation: isolate;
+    animation: process-badge-breathe 3.2s ease-in-out infinite;
+  }
+
+  .process-flow-badge::before {
+    content: "";
+    position: absolute;
+    inset: -5px;
+    z-index: -1;
+    border-radius: 0.95rem;
+    border: 1px solid rgba(37, 99, 235, 0.22);
+    opacity: 0;
+    transform: scale(0.7);
+  }
+
+  .process-flow-badge::after {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    z-index: -1;
+    border-radius: 0.85rem;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.45), rgba(245, 158, 11, 0.45));
+    opacity: 0;
+    filter: blur(8px);
+    transition: opacity 0.25s ease;
+  }
+
+  .process-flow-card:hover .process-flow-badge {
+    animation: process-badge-pop 0.55s ease both;
+  }
+
+  .process-flow-card:hover .process-flow-badge::before {
+    animation: process-badge-ripple 0.75s ease-out;
+  }
+
+  .process-flow-card:hover .process-flow-badge::after {
+    opacity: 0.55;
+  }
+
+  .process-flow-card:nth-child(2) .process-flow-badge { animation-delay: 0.18s; }
+  .process-flow-card:nth-child(3) .process-flow-badge { animation-delay: 0.36s; }
+  .process-flow-card:nth-child(4) .process-flow-badge { animation-delay: 0.54s; }
+  .process-flow-card:nth-child(5) .process-flow-badge { animation-delay: 0.72s; }
+  .process-flow-card:nth-child(6) .process-flow-badge { animation-delay: 0.9s; }
+
+  .process-flow-line {
+    transform-origin: left;
+    transform: scaleX(0);
+  }
+
+  .process-flow-grid.is-staggered .process-flow-line {
+    animation: process-line-draw 0.62s ease forwards;
+  }
+
+  .process-flow-grid.is-staggered .process-flow-card:nth-child(1) .process-flow-line { animation-delay: 180ms; }
+  .process-flow-grid.is-staggered .process-flow-card:nth-child(2) .process-flow-line { animation-delay: 270ms; }
+  .process-flow-grid.is-staggered .process-flow-card:nth-child(3) .process-flow-line { animation-delay: 360ms; }
+  .process-flow-grid.is-staggered .process-flow-card:nth-child(4) .process-flow-line { animation-delay: 450ms; }
+  .process-flow-grid.is-staggered .process-flow-card:nth-child(5) .process-flow-line { animation-delay: 540ms; }
+  .process-flow-grid.is-staggered .process-flow-card:nth-child(6) .process-flow-line { animation-delay: 630ms; }
+}
+
+@keyframes landing-bg-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes landing-fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes landing-fade-left {
+  from { opacity: 0; transform: translateX(32px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes landing-float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes process-badge-breathe {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 10px rgba(30, 58, 138, 0.22);
+  }
+  50% {
+    transform: scale(1.055);
+    box-shadow: 0 8px 18px rgba(30, 58, 138, 0.28);
+  }
+}
+
+@keyframes process-badge-pop {
+  0% { transform: scale(1) rotate(0deg); }
+  45% { transform: scale(1.18) rotate(-5deg); }
+  100% { transform: scale(1.08) rotate(-3deg); }
+}
+
+@keyframes process-badge-ripple {
+  0% {
+    opacity: 0.7;
+    transform: scale(0.72);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.45);
+  }
+}
+
+@keyframes process-line-draw {
+  from { transform: scaleX(0); opacity: 0.3; }
+  to { transform: scaleX(1); opacity: 1; }
 }

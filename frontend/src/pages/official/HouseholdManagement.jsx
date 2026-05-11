@@ -175,7 +175,7 @@ export default function HouseholdManagement() {
           <p className="page-section-label">Barangay Operations</p>
           <h1 className="mt-1 text-2xl font-bold text-ink-900">Households & Families</h1>
           <p className="mt-1 max-w-2xl text-sm text-ink-500">
-            Manage household records first, then add family groups before encoding individual beneficiaries.
+            Manage household records first, then add family groups before encoding individual Resident Profiles.
           </p>
         </div>
         <button onClick={() => setShowHhForm((v) => !v)} className="btn-primary shrink-0">
@@ -272,7 +272,7 @@ export default function HouseholdManagement() {
                 <Skeleton className="h-16 w-full" />
               </div>
             ) : households.length === 0 ? (
-              <EmptyPanel title="No households found" text="Create a household before adding families and beneficiaries." />
+              <EmptyPanel title="No households found" text="Create a household before adding families and Resident Profiles." />
             ) : (
               <div className="divide-y divide-slate-100">
                 {households.map((hh) => (
@@ -351,7 +351,7 @@ export default function HouseholdManagement() {
                     <Skeleton className="h-14 w-full" />
                   </div>
                 ) : families.length === 0 ? (
-                  <EmptyPanel title="No families yet" text="Add a family group before adding beneficiaries." />
+                  <EmptyPanel title="No families yet" text="Add a family group before adding Resident Profiles." />
                 ) : (
                   <div className="divide-y divide-slate-100">
                     {families.map((f) => (
@@ -364,7 +364,7 @@ export default function HouseholdManagement() {
                           <span className="badge bg-primary-100 text-primary-700">{f.member_count} members</span>
                         </div>
                         <button
-                          onClick={() => navigate(`/official/beneficiaries?family=${f.id}`)}
+                          onClick={() => navigate(`/official/resident-profiles?family=${f.id}`)}
                           className="mt-2 text-xs font-semibold text-primary-600 transition hover:text-primary-800"
                         >
                           View members
@@ -440,3 +440,5 @@ function Field({ label, error, hint, children }) {
 function inp(error) {
   return `form-input ${error ? 'form-input-error' : ''}`
 }
+
+

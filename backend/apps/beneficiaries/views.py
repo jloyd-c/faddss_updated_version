@@ -116,23 +116,23 @@ class BeneficiarySoftDeleteView(APIView):
         b = get_object_or_404(Beneficiary, pk=pk)
         b.soft_delete(deleted_by_user=request.user)
         log_state_change(b, 'BENEFICIARY', b.family.household, ProfileChangeLog.Action.SOFT_DELETED, request.user)
-        return Response({'detail': 'Beneficiary soft-deleted.'}, status=status.HTTP_200_OK)
+        return Response({'detail': 'Resident profile soft-deleted.'}, status=status.HTTP_200_OK)
 
     def post(self, request, pk):
         b = get_object_or_404(Beneficiary.all_objects, pk=pk)
         b.restore()
         log_state_change(b, 'BENEFICIARY', b.family.household, ProfileChangeLog.Action.RESTORED, request.user)
-        return Response({'detail': 'Beneficiary restored.'}, status=status.HTTP_200_OK)
+        return Response({'detail': 'Resident profile restored.'}, status=status.HTTP_200_OK)
 
 
 class ResidentProfileView(APIView):
-    """GET /api/beneficiaries/me/ — resident reads their own profile."""
+    """GET /api/resident-profiles/me/ - resident reads their own profile."""
     permission_classes = [IsAuthenticated, IsResident]
 
     def get(self, request):
         beneficiary = request.user.beneficiary
         if not beneficiary:
-            return Response({'detail': 'No beneficiary profile linked to this account.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'detail': 'No resident profile linked to this account.'}, status=status.HTTP_400_BAD_REQUEST)
         instance = Beneficiary.objects.select_related(
             'family', 'family__household', 'household'
         ).prefetch_related('indicators').get(pk=beneficiary.pk)

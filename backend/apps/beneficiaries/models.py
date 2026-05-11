@@ -282,7 +282,7 @@ class Beneficiary(SoftDeleteMixin):
                 today.year - self.birthdate.year
                 - ((today.month, today.day) < (self.birthdate.month, self.birthdate.day))
             )
-        self.is_tupad_eligible = (self.age >= 18 and self.role != 'child')
+        self.is_tupad_eligible = self.age >= 18
         super().save(*args, **kwargs)
 
     def __str__(self):

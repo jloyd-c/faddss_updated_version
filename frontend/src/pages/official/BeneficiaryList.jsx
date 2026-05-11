@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { beneficiariesApi } from '../../api/beneficiaries'
+import { residentProfilesApi } from '../../api/beneficiaries'
 import Pagination from '../../components/common/Pagination'
 import { SkeletonTableRows } from '../../components/common/Skeleton'
 
@@ -28,61 +28,61 @@ export default function BeneficiaryList() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const familyFilter = searchParams.get('family') || ''
-  const [beneficiaries, setBeneficiaries] = useState([])
+  const [residentProfiles, setResidentProfiles] = useState([])
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [page, setPage] = useState(1)
   const [meta, setMeta] = useState(null)
 
-  const fetchBeneficiaries = async (query = search, nextPage = page) => {
+  const fetchResidentProfiles = async (query = search, nextPage = page) => {
     setLoading(true)
     setError('')
     try {
       const params = { page: nextPage }
       if (query.trim()) params.search = query.trim()
       if (familyFilter) params.family = familyFilter
-      const data = await beneficiariesApi.list(params)
-      setBeneficiaries(data.results ?? data)
+      const data = await residentProfilesApi.list(params)
+      setResidentProfiles(data.results ?? data)
       setMeta(data.results ? data : null)
       setPage(nextPage)
     } catch {
-      setError('Failed to load beneficiaries.')
+      setError('Failed to load Resident Profiles.')
     } finally {
       setLoading(false)
     }
   }
 
   useEffect(() => {
-    const timer = setTimeout(() => fetchBeneficiaries(search, 1), search.trim() ? 300 : 0)
+    const timer = setTimeout(() => fetchResidentProfiles(search, 1), search.trim() ? 300 : 0)
     return () => clearTimeout(timer)
   }, [search, familyFilter])
 
-  const eligibleOnPage = beneficiaries.filter((b) => b.is_tupad_eligible).length
-  const ineligibleOnPage = beneficiaries.length - eligibleOnPage
+  const eligibleOnPage = residentProfiles.filter((b) => b.is_tupad_eligible).length
+  const ineligibleOnPage = residentProfiles.length - eligibleOnPage
 
   return (
     <div className="max-w-6xl space-y-5">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="page-section-label">Barangay Operations</p>
-          <h1 className="mt-1 text-2xl font-bold text-ink-900">Beneficiaries</h1>
+          <h1 className="mt-1 text-2xl font-bold text-ink-900">Resident Profiles</h1>
           <p className="mt-1 max-w-2xl text-sm text-ink-500">
             {familyFilter
               ? 'Showing members from the selected family group.'
               : 'Manage individual resident profiles, household links, sector membership, and TUPAD eligibility indicators.'}
           </p>
         </div>
-        <button onClick={() => navigate('/official/beneficiaries/new')} className="btn-primary shrink-0">
+        <button onClick={() => navigate('/official/resident-profiles/new')} className="btn-primary shrink-0">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
           </svg>
-          Add Beneficiary
+          Add Resident Profile
         </button>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-3">
-        <MetricCard label="Records Found" value={meta?.count ?? beneficiaries.length} color="primary" />
+        <MetricCard label="Records Found" value={meta?.count ?? residentProfiles.length} color="primary" />
         <MetricCard label="Eligible On Page" value={eligibleOnPage} color="emerald" />
         <MetricCard label="Not Eligible On Page" value={ineligibleOnPage} color="slate" />
       </div>
@@ -95,7 +95,7 @@ export default function BeneficiaryList() {
             </svg>
             <input
               type="text"
-              placeholder="Search beneficiary by name..."
+              placeholder="Search resident profile by name..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="form-input pl-9"
@@ -113,7 +113,7 @@ export default function BeneficiaryList() {
           {familyFilter && (
             <button
               type="button"
-              onClick={() => navigate('/official/beneficiaries')}
+              onClick={() => navigate('/official/resident-profiles')}
               className="btn-secondary justify-center"
             >
               All Families
@@ -146,7 +146,7 @@ export default function BeneficiaryList() {
             <tbody>
               {loading ? (
                 <SkeletonTableRows rows={7} cols={7} />
-              ) : beneficiaries.length === 0 ? (
+              ) : residentProfiles.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="px-4 py-16 text-center">
                     <div className="flex flex-col items-center gap-2 text-ink-400">
@@ -154,17 +154,17 @@ export default function BeneficiaryList() {
                         <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" /><circle cx="12" cy="7" r="4" />
                       </svg>
                       <p className="text-sm font-semibold text-ink-600">
-                        {search ? 'No beneficiaries match your search' : 'No beneficiaries yet'}
+                        {search ? 'No Resident Profiles match your search' : 'No Resident Profiles yet'}
                       </p>
                       <p className="text-xs text-ink-400">
-                        {search ? 'Try a different name or clear the search.' : 'Start by creating a household, then adding beneficiaries.'}
+                        {search ? 'Try a different name or clear the search.' : 'Start by creating a household, then adding Resident Profiles.'}
                       </p>
                     </div>
                   </td>
                 </tr>
               ) : (
-                beneficiaries.map((b) => (
-                  <tr key={b.id} className="cursor-pointer transition-colors hover:bg-slate-50/70" onClick={() => navigate(`/official/beneficiaries/${b.id}`)}>
+                residentProfiles.map((b) => (
+                  <tr key={b.id} className="cursor-pointer transition-colors hover:bg-slate-50/70" onClick={() => navigate(`/official/resident-profiles/${b.id}`)}>
                     <td className="border-b border-slate-100 px-4 py-3.5">
                       <div className="flex items-center gap-2.5">
                         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary-100 text-[11px] font-bold text-primary-700">
@@ -202,7 +202,7 @@ export default function BeneficiaryList() {
                     </td>
                     <td className="border-b border-slate-100 px-4 py-3.5 text-center" onClick={(e) => e.stopPropagation()}>
                       <button
-                        onClick={() => navigate(`/official/beneficiaries/${b.id}`)}
+                        onClick={() => navigate(`/official/resident-profiles/${b.id}`)}
                         className="text-xs font-semibold text-primary-600 transition hover:text-primary-800"
                       >
                         View
@@ -214,7 +214,7 @@ export default function BeneficiaryList() {
             </tbody>
           </table>
         </div>
-        <Pagination meta={meta} page={page} onPageChange={(next) => fetchBeneficiaries(search, next)} label="beneficiaries" />
+        <Pagination meta={meta} page={page} onPageChange={(next) => fetchResidentProfiles(search, next)} label="Resident Profiles" />
       </div>
     </div>
   )
@@ -234,3 +234,6 @@ function MetricCard({ label, value, color }) {
     </div>
   )
 }
+
+
+
