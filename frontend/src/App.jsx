@@ -24,6 +24,7 @@ import HouseholdManagement from './pages/official/HouseholdManagement'
 import ScoringRanking from './pages/official/ScoringRanking'
 import ParticipationRecord from './pages/official/ParticipationRecord'
 import AuditTrail from './pages/official/AuditTrail'
+import ReportsPage from './pages/reports/ReportsPage'
 
 // Resident pages
 import ResidentProfile from './pages/resident/Profile'
@@ -38,6 +39,7 @@ function AdminRoutes() {
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="users" element={<UserManagement />} />
           <Route path="criteria" element={<CriteriaManagement />} />
+          <Route path="reports" element={<ReportsPage />} />
           <Route index element={<Navigate to="dashboard" replace />} />
         </Routes>
       </Layout>
@@ -66,6 +68,7 @@ function OfficialRoutes() {
           <Route path="scoring" element={<ScoringRanking />} />
           <Route path="participation" element={<ParticipationRecord />} />
           <Route path="audit" element={<AuditTrail />} />
+          <Route path="reports" element={<ReportsPage />} />
           <Route index element={<Navigate to="dashboard" replace />} />
         </Routes>
       </Layout>

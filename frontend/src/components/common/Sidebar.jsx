@@ -20,6 +20,7 @@ const ICONS = {
   scoring: <Icon><line x1="18" y1="20" x2="18" y2="10" /><line x1="12" y1="20" x2="12" y2="4" /><line x1="6" y1="20" x2="6" y2="14" /></Icon>,
   participation: <Icon><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2" /><rect x="9" y="3" width="6" height="4" rx="2" ry="2" /><path d="M9 12l2 2 4-4" /></Icon>,
   audit: <Icon><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></Icon>,
+  reports: <Icon><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" /></Icon>,
   profile: <Icon><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" /><circle cx="12" cy="7" r="4" /></Icon>,
   score: <Icon><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></Icon>,
   history: <Icon><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></Icon>,
@@ -33,12 +34,14 @@ const OFFICIAL_LINKS = [
   { to: '/official/scoring', label: 'Scoring & Ranking', icon: ICONS.scoring },
   { to: '/official/participation', label: 'Participation', icon: ICONS.participation },
   { to: '/official/audit', label: 'Audit Trail', icon: ICONS.audit },
+  { to: '/official/reports', label: 'Reports', icon: ICONS.reports },
 ]
 
 const ADMIN_LINKS = [
   { to: '/admin/dashboard', label: 'Dashboard', icon: ICONS.dashboard },
   { to: '/admin/users', label: 'User Management', icon: ICONS.users },
   { to: '/admin/criteria', label: 'Scoring Criteria', icon: ICONS.criteria },
+  { to: '/admin/reports', label: 'Reports', icon: ICONS.reports },
 ]
 
 const RESIDENT_LINKS = [
